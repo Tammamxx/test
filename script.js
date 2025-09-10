@@ -1,38 +1,58 @@
-// init AOS
-document.addEventListener('DOMContentLoaded', function () {
-  AOS.init({ once: true, duration: 700, easing: 'ease-out-cubic' });
+// AOS init
+AOS.init({ duration: 800, once: true });
 
-  // set year
-  document.getElementById('year').innerText = new Date().getFullYear();
+// Year
+document.getElementById('year').innerText = new Date().getFullYear();
 
-  // theme from localStorage
-  const root = document.documentElement;
-  const saved = localStorage.getItem('site-theme');
-  if (saved === 'dark') root.setAttribute('data-theme', 'dark');
+// Theme Toggle
+const root = document.documentElement;
+const savedTheme = localStorage.getItem('luxury-theme');
+if (savedTheme) root.setAttribute('data-theme', savedTheme);
 
-  // theme toggle button
-  const themeBtn = document.getElementById('themeToggle');
-  themeBtn.addEventListener('click', () => {
-    const cur = root.getAttribute('data-theme');
-    if (cur === 'dark') {
-      root.removeAttribute('data-theme');
-      localStorage.setItem('site-theme', 'light');
-      themeBtn.innerHTML = '<i class="bi bi-moon"></i>';
-    } else {
-      root.setAttribute('data-theme', 'dark');
-      localStorage.setItem('site-theme', 'dark');
-      themeBtn.innerHTML = '<i class="bi bi-sun"></i>';
-    }
-  });
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const current = root.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('luxury-theme', next);
+});
 
-  // smooth anchor scrolling fallback
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click', function(e){
-      const target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  });
+// Dynamic Projects
+const projects = [
+  {
+    title: "Light/Dark Theme Toggle",
+    desc: "A theme switcher with persistence and smooth transitions.",
+    img: "theme-toggle.jpg",
+    link: "https://github.com/Tammamxx/Light-Dark-Theme",
+    tech: "HTML • CSS • JS"
+  },
+  {
+    title: "Signup Validation",
+    desc: "Form validation with real-time feedback.",
+    img: "signup.jpg",
+    link: "https://github.com/Tammamxx/Signup-Validation",
+    tech: "HTML • JS • Bootstrap"
+  },
+  {
+    title: "Calculator Program",
+    desc: "Functional calculator with keyboard support.",
+    img: "calculator.jpg",
+    link: "https://github.com/Tammamxx/Calculator-Program",
+    tech: "HTML • CSS • JS"
+  }
+];
+
+const container = document.getElementById('projects-container');
+projects.forEach((p, i) => {
+  container.innerHTML += `
+    <div class="col-md-4" data-aos="zoom-in" data-aos-delay="${i*100}">
+      <a href="${p.link}" target="_blank" class="card h-100 text-decoration-none text-dark luxury-card">
+        <img src="${p.img}" class="card-img-top" alt="${p.title}" loading="lazy">
+        <div class="card-body">
+          <h5 class="card-title luxury-title">${p.title}</h5>
+          <p class="card-text">${p.desc}</p>
+          <div class="small text-muted">${p.tech}</div>
+        </div>
+      </a>
+    </div>
+  `;
 });
